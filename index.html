@@ -122,6 +122,15 @@
                     </button>
                 </div>
             </div>
+
+            <div class="mt-6 p-4 bg-gray-50 rounded-md border border-gray-200">
+                <p class="text-sm font-semibold text-gray-800 mb-2">Akun Demo:</p>
+                <ul class="text-xs text-gray-700 space-y-1">
+                    <li><strong>Admin:</strong> admin@gearex.com / admin123</li>
+                    <li><strong>Anggota:</strong> member@gearex.com / member123</li>
+                </ul>
+                <p class="text-xs text-gray-500 mt-2">Untuk tujuan demo & pengujian.</p>
+            </div>
         </div>
     </div>
 
@@ -176,10 +185,8 @@
             const password = document.getElementById('login-password').value;
 
             if (email === 'admin@gearex.com' && password === 'admin123') {
-                alert('Login Admin Berhasil!');
                 window.location.href = 'admin_dashboard.html'; 
             } else if (email === 'member@gearex.com' && password === 'member123') {
-                alert('Login Anggota Berhasil!');
                 window.location.href = 'member_dashboard.html';
             } else {
                 alert('Email atau password salah!'); 
@@ -188,7 +195,6 @@
 
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('Register attempted! (Logika backend diperlukan)');
             loginTab.click(); 
         });
 

@@ -11,13 +11,56 @@
             background-color: #f4f6f9;
         }
         .sidebar-link.active {
-            @apply bg-green-700 text-white;
+            background-color: #0d9488;
+            color: #ffffff;
         }
         th {
-            @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         td {
-            @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+            padding: 1rem 1.5rem;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            color: #1f2937;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay:not(.hidden) .modal-content {
+            transform: translateY(0);
+        }
+        .hidden { 
+            display: none; 
+            opacity: 0;
         }
     </style>
 </head>
@@ -40,11 +83,15 @@
                 <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 Kelola Peminjaman
             </a>
-            <a href="admin_manage_members.html" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+            <a href="admin_reports.html" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Lihat Laporan
+            </a>
+            <a href="admin_manage_members.html" class="sidebar-link active flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
                 <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m0 0v-2a3 3 0 013-3h4a3 3 0 013 3v2M7 20H2v-2a3 3 0 015.356-1.857M7 13a6 6 0 0010 0V4A6 6 0 007 4v9z"></path></svg>
                 Kelola Anggota
             </a>
-        </div>
+        </nav>
         <div class="mt-auto pt-4 border-t border-gray-700">
             <a href="index.html" class="flex items-center p-3 rounded-lg text-red-400 hover:bg-gray-700 transition-colors duration-200">
                 <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -56,9 +103,6 @@
     <div class="flex-grow flex flex-col">
         <header class="bg-white shadow-md p-4 flex items-center justify-between md:hidden">
             <h1 class="text-xl font-bold text-gray-800">Kelola Anggota</h1>
-            <div class="flex items-center space-x-3">
-                <img src="https://placehold.co/40x40/cccccc/ffffff?text=A" alt="Admin Avatar" class="w-10 h-10 rounded-full border-2 border-gray-300">
-            </div>
         </header>
 
         <main class="flex-grow p-6 overflow-y-auto">
@@ -66,35 +110,25 @@
 
             <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
                 <div class="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0 md:space-x-4">
-                    <input type="text" placeholder="Cari nama atau email anggota..." class="md:flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm">
+                    <input type="text" placeholder="Cari nama atau email anggota..." class="md:flex-grow w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 shadow-sm">
                     
-                    <div class="flex w-full md:w-auto space-x-2">
-                        <button class="flex-1 md:flex-none px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                            Filter
-                        </button>
-                        <button class="flex-1 md:flex-none px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M3 8h18M3 12h18M3 16h18M3 20h18"></path></svg>
-                            Urutkan
-                        </button>
-                        <button class="flex-1 md:flex-none px-4 py-2 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0H6"></path></svg>
-                            Tambah Anggota
-                        </button>
-                    </div>
+                    <button id="addMemberBtn" class="w-full md:w-auto flex-shrink-0 px-4 py-2 bg-teal-600 text-white rounded-lg shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0H6"></path></svg>
+                        Tambah Anggota
+                    </button>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Peran</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Terakhir Login</th>
-                                <th scope="col">Aksi</th>
+                                <th>ID</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Peran</th>
+                                <th>Status</th>
+                                <th>Terakhir Login</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -106,18 +140,12 @@
                                 </td>
                                 <td>john.doe@email.com</td>
                                 <td>Anggota</td>
-                                <td class="text-green-600 font-medium">Aktif</td>
+                                <td class="text-teal-600 font-medium">Aktif</td>
                                 <td>2025-07-10</td>
-                                <td class="flex space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-900 view-profile-btn" data-id="001">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                    </button>
-                                    <button class="text-yellow-600 hover:text-yellow-900 edit-role-btn" data-id="001" data-role="member">
-                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-900 toggle-status-btn" data-id="001" data-status="active">
-                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 0012 5.636 9 9 0 005.636 12 9 9 0 0012 18.364zm0 0L12 12m6.364-6.364L12 12m-6.364 6.364L12 12"></path></svg>
-                                    </button>
+                                <td class="flex items-center space-x-2">
+                                    <button class="text-blue-600 hover:text-blue-900 view-profile-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                                    <button class="text-yellow-600 hover:text-yellow-900 edit-member-btn"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
+                                    <button class="text-red-600 hover:text-red-900"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 0012 5.636 9 9 0 005.636 12 9 9 0 0012 18.364zm0 0L12 12m6.364-6.364L12 12m-6.364 6.364L12 12"></path></svg></button>
                                 </td>
                             </tr>
                             <tr>
@@ -130,16 +158,10 @@
                                 <td>Anggota</td>
                                 <td class="text-red-600 font-medium">Suspended</td>
                                 <td>2025-07-08</td>
-                                <td class="flex space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-900 view-profile-btn" data-id="002">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                    </button>
-                                    <button class="text-yellow-600 hover:text-yellow-900 edit-role-btn" data-id="002" data-role="member">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-900 toggle-status-btn" data-id="002" data-status="suspended">
-                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </button>
+                                <td class="flex items-center space-x-2">
+                                    <button class="text-blue-600 hover:text-blue-900 view-profile-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                                    <button class="text-yellow-600 hover:text-yellow-900 edit-member-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
+                                    <button class="text-teal-600 hover:text-teal-900"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -155,6 +177,117 @@
         </main>
     </div>
 
+    <div id="addMemberModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="addModalCloseBtn" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Tambah Anggota Baru</h2>
+            <form class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Peran</label>
+                        <select class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                            <option>Anggota</option>
+                            <option>Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Foto Profil</label>
+                    <input type="file" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                </div>
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" id="addModalCancelBtn" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="editMemberModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="editModalCloseBtn" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Data Anggota</h2>
+            <form class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" value="John Doe" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" value="john.doe@email.com" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Password Baru</label>
+                        <input type="password" placeholder="Kosongkan jika tidak diubah" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Peran</label>
+                        <select class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                            <option selected>Anggota</option>
+                            <option>Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" id="editModalCancelBtn" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="viewProfileModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="viewModalCloseBtn" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            <div class="flex flex-col items-center text-center">
+                <img src="https://placehold.co/100x100/cccccc/ffffff?text=JD" class="w-24 h-24 rounded-full mb-4 border-4 border-gray-200" alt="John Doe">
+                <h2 class="text-2xl font-bold text-gray-800">John Doe</h2>
+                <p class="text-gray-500">Anggota</p>
+                <span class="mt-2 px-3 py-1 text-sm font-medium bg-teal-100 text-teal-800 rounded-full">Aktif</span>
+            </div>
+            <div class="mt-6 border-t border-gray-200 pt-6">
+                <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
+                    <div class="col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Email</dt>
+                        <dd class="mt-1 text-sm text-gray-900">john.doe@email.com</dd>
+                    </div>
+                    <div class="col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Bergabung Sejak</dt>
+                        <dd class="mt-1 text-sm text-gray-900">1 Januari 2025</dd>
+                    </div>
+                    <div class="col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Total Peminjaman</dt>
+                        <dd class="mt-1 text-sm text-gray-900">5 Peminjaman</dd>
+                    </div>
+                    <div class="col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Terakhir Login</dt>
+                        <dd class="mt-1 text-sm text-gray-900">10 Juli 2025</dd>
+                    </div>
+                </dl>
+            </div>
+             <div class="flex justify-end space-x-4 pt-6">
+                <button type="button" id="viewModalCancelBtn" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Tutup</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const currentPath = window.location.pathname.split('/').pop();
@@ -164,6 +297,53 @@
                 } else {
                     link.classList.remove('active');
                 }
+            });
+
+            const addMemberBtn = document.getElementById('addMemberBtn');
+            const addMemberModal = document.getElementById('addMemberModal');
+            const addModalCloseBtn = document.getElementById('addModalCloseBtn');
+            const addModalCancelBtn = document.getElementById('addModalCancelBtn');
+
+            const editMemberBtns = document.querySelectorAll('.edit-member-btn');
+            const editMemberModal = document.getElementById('editMemberModal');
+            const editModalCloseBtn = document.getElementById('editModalCloseBtn');
+            const editModalCancelBtn = document.getElementById('editModalCancelBtn');
+            
+            const viewProfileBtns = document.querySelectorAll('.view-profile-btn');
+            const viewProfileModal = document.getElementById('viewProfileModal');
+            const viewModalCloseBtn = document.getElementById('viewModalCloseBtn');
+            const viewModalCancelBtn = document.getElementById('viewModalCancelBtn');
+
+            const openModal = (modal) => {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.style.opacity = '1', 10); 
+            };
+            
+            const closeModal = (modal) => {
+                modal.style.opacity = '0';
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            };
+
+            addMemberBtn.addEventListener('click', () => openModal(addMemberModal));
+            addModalCloseBtn.addEventListener('click', () => closeModal(addMemberModal));
+            addModalCancelBtn.addEventListener('click', () => closeModal(addMemberModal));
+
+            editMemberBtns.forEach(btn => {
+                btn.addEventListener('click', () => openModal(editMemberModal));
+            });
+            editModalCloseBtn.addEventListener('click', () => closeModal(editMemberModal));
+            editModalCancelBtn.addEventListener('click', () => closeModal(editMemberModal));
+
+            viewProfileBtns.forEach(btn => {
+                btn.addEventListener('click', () => openModal(viewProfileModal));
+            });
+            viewModalCloseBtn.addEventListener('click', () => closeModal(viewProfileModal));
+            viewModalCancelBtn.addEventListener('click', () => closeModal(viewProfileModal));
+            
+            window.addEventListener('click', (event) => {
+                if (event.target === addMemberModal) closeModal(addMemberModal);
+                if (event.target === editMemberModal) closeModal(editMemberModal);
+                if (event.target === viewProfileModal) closeModal(viewProfileModal);
             });
         });
     </script>

@@ -11,16 +11,60 @@
             background-color: #f4f6f9;
         }
         .sidebar-link.active {
-            @apply bg-green-700 text-white;
+            background-color: #0d9488;
+            color: #ffffff;
         }
         th {
-            @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         td {
-            @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+            padding: 1rem 1.5rem;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            color: #1f2937;
         }
         .tab-active {
-            @apply bg-green-600 text-white;
+            background-color: #0d9488;
+            color: white;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay:not(.hidden) .modal-content {
+            transform: translateY(0);
+        }
+        .hidden { 
+            display: none; 
+            opacity: 0;
         }
     </style>
 </head>
@@ -51,7 +95,7 @@
                 <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m0 0v-2a3 3 0 013-3h4a3 3 0 013 3v2M7 20H2v-2a3 3 0 015.356-1.857M7 13a6 6 0 0010 0V4A6 6 0 007 4v9z"></path></svg>
                 Kelola Anggota
             </a>
-        </div>
+        </nav>
         <div class="mt-auto pt-4 border-t border-gray-700">
             <a href="index.html" class="flex items-center p-3 rounded-lg text-red-400 hover:bg-gray-700 transition-colors duration-200">
                 <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -63,9 +107,6 @@
     <div class="flex-grow flex flex-col">
         <header class="bg-white shadow-md p-4 flex items-center justify-between md:hidden">
             <h1 class="text-xl font-bold text-gray-800">Kelola Peminjaman</h1>
-            <div class="flex items-center space-x-3">
-                <img src="https://placehold.co/40x40/cccccc/ffffff?text=A" alt="Admin Avatar" class="w-10 h-10 rounded-full border-2 border-gray-300">
-            </div>
         </header>
 
         <main class="flex-grow p-6 overflow-y-auto">
@@ -73,43 +114,46 @@
 
             <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
                 <div class="flex mb-6 bg-gray-100 rounded-lg p-1 shadow-sm">
-                    <button id="pendingTab" class="flex-1 py-2 px-4 text-center text-sm font-medium rounded-md transition-colors duration-200 tab-active">Menunggu</button>
+                    <button id="pendingTab" class="flex-1 py-2 px-4 text-center text-sm font-medium rounded-md transition-colors duration-200">Menunggu</button>
                     <button id="approvedOngoingTab" class="flex-1 py-2 px-4 text-center text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 hover:bg-gray-200">Disetujui / Berjalan</button>
                     <button id="rejectedCompletedTab" class="flex-1 py-2 px-4 text-center text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 hover:bg-gray-200">Ditolak / Selesai</button>
                 </div>
 
-                <div class="mb-4">
-                    <input type="text" placeholder="Cari nama anggota atau peralatan..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm">
+                <div class="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0 md:space-x-4">
+                    <input type="text" placeholder="Cari nama anggota atau peralatan..." class="md:flex-grow w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 shadow-sm">
+                    <button id="addBorrowingBtn" class="w-full md:w-auto px-4 py-2 bg-teal-600 text-white rounded-lg shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0H6"></path></svg>
+                        Tambah Peminjaman
+                    </button>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Peralatan</th>
-                                <th scope="col">Anggota</th>
-                                <th scope="col">Tanggal Diminta</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Aksi</th>
+                                <th>ID</th>
+                                <th>Peralatan</th>
+                                <th>Anggota</th>
+                                <th>Tanggal Pinjam</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="requestTableBody" class="bg-white divide-y divide-gray-200">
-                            <tr data-status="pending">
+                             <tr data-status="pending">
                                 <td>#REQ001</td>
                                 <td class="flex items-center">
                                     <img src="https://placehold.co/40x40/d1d1d1/333333?text=K" class="w-10 h-10 rounded-md mr-3" alt="Kompor">
                                     Kompor Portable
                                 </td>
                                 <td>Alice Smith</td>
-                                <td>15 Juli - 20 Juli 2025</td>
+                                <td>15 Jul 2025 - 20 Jul 2025</td>
                                 <td><span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Menunggu</span></td>
-                                <td class="flex space-x-2">
-                                    <button class="px-3 py-1 bg-green-600 text-white rounded-md text-xs font-medium hover:bg-green-700 approve-btn" data-id="REQ001">Setujui</button>
-                                    <button class="px-3 py-1 bg-red-600 text-white rounded-md text-xs font-medium hover:bg-red-700 reject-btn" data-id="REQ001">Tolak</button>
-                                    <button class="text-blue-600 hover:text-blue-900 view-detail-btn" data-id="REQ001">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                    </button>
+                                <td class="flex items-center space-x-2">
+                                    <button class="px-3 py-1 bg-green-600 text-white rounded-md text-xs font-medium hover:bg-green-700">Setujui</button>
+                                    <button class="px-3 py-1 bg-red-600 text-white rounded-md text-xs font-medium hover:bg-red-700">Tolak</button>
+                                    <button class="text-yellow-600 hover:text-yellow-900 edit-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
+                                    <button class="text-blue-600 hover:text-blue-900"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
                                 </td>
                             </tr>
                             <tr data-status="approved-ongoing">
@@ -119,14 +163,12 @@
                                     Tenda Dome 4P
                                 </td>
                                 <td>Bob Johnson</td>
-                                <td>20 Juli - 25 Juli 2025</td>
-                                <td><span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Disetujui</span></td>
-                                <td class="flex space-x-2">
-                                    <button class="px-3 py-1 bg-purple-600 text-white rounded-md text-xs font-medium hover:bg-purple-700 record-pickup-btn" data-id="REQ002">Catat Ambil</button>
-                                    <button class="px-3 py-1 bg-orange-600 text-white rounded-md text-xs font-medium hover:bg-orange-700 record-return-btn" data-id="REQ002">Catat Kembali</button>
-                                    <button class="text-blue-600 hover:text-blue-900 view-detail-btn" data-id="REQ002">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></path></svg>
-                                    </button>
+                                <td>20 Jul 2025 - 25 Jul 2025</td>
+                                <td><span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Berjalan</span></td>
+                                <td class="flex items-center space-x-2">
+                                    <button class="px-3 py-1 bg-orange-500 text-white rounded-md text-xs font-medium hover:bg-orange-600">Catat Kembali</button>
+                                    <button class="text-yellow-600 hover:text-yellow-900 edit-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
+                                    <button class="text-blue-600 hover:text-blue-900"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
                                 </td>
                             </tr>
                             <tr data-status="rejected-completed">
@@ -136,12 +178,10 @@
                                     Carrier 60L
                                 </td>
                                 <td>Charlie Brown</td>
-                                <td>01 Juli - 05 Juli 2025</td>
-                                <td><span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">Selesai</span></td>
-                                <td class="flex space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-900 view-detail-btn" data-id="REQ003">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                    </button>
+                                <td>01 Jul 2025 - 05 Jul 2025</td>
+                                <td><span class="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-800 rounded-full">Selesai</span></td>
+                                <td class="flex items-center space-x-2">
+                                     <button class="text-blue-600 hover:text-blue-900"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -157,6 +197,94 @@
         </main>
     </div>
 
+    <div id="addBorrowingModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="addModalCloseBtn" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Tambah Peminjaman Baru</h2>
+            <form class="space-y-4">
+                <div>
+                    <label for="add-anggota" class="block text-sm font-medium text-gray-700">Anggota</label>
+                    <select id="add-anggota" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        <option>Pilih Anggota...</option>
+                        <option>Alice Smith</option>
+                        <option>Bob Johnson</option>
+                        <option>Charlie Brown</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="add-peralatan" class="block text-sm font-medium text-gray-700">Peralatan</label>
+                    <select id="add-peralatan" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        <option>Pilih Peralatan...</option>
+                        <option>Tenda Dome 4P</option>
+                        <option>Carrier Gunung 60L</option>
+                        <option>Kompor Portable</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="add-tgl-pinjam" class="block text-sm font-medium text-gray-700">Tanggal Pinjam</label>
+                        <input type="date" id="add-tgl-pinjam" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label for="add-tgl-kembali" class="block text-sm font-medium text-gray-700">Tanggal Kembali</label>
+                        <input type="date" id="add-tgl-kembali" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                </div>
+                <div>
+                    <label for="add-catatan" class="block text-sm font-medium text-gray-700">Catatan (Opsional)</label>
+                    <textarea id="add-catatan" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"></textarea>
+                </div>
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" id="addModalCancelBtn" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="editBorrowingModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="editModalCloseBtn" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Peminjaman #REQ001</h2>
+            <form class="space-y-4">
+                <div>
+                    <label for="edit-anggota" class="block text-sm font-medium text-gray-700">Anggota</label>
+                    <select id="edit-anggota" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        <option selected>Alice Smith</option>
+                        <option>Bob Johnson</option>
+                        <option>Charlie Brown</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="edit-peralatan" class="block text-sm font-medium text-gray-700">Peralatan</label>
+                    <select id="edit-peralatan" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        <option>Tenda Dome 4P</option>
+                        <option>Carrier Gunung 60L</option>
+                        <option selected>Kompor Portable</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-tgl-pinjam" class="block text-sm font-medium text-gray-700">Tanggal Pinjam</label>
+                        <input type="date" id="edit-tgl-pinjam" value="2025-07-15" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label for="edit-tgl-kembali" class="block text-sm font-medium text-gray-700">Tanggal Kembali</label>
+                        <input type="date" id="edit-tgl-kembali" value="2025-07-20" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <p class="mt-1"><span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Menunggu</span></p>
+                </div>
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" id="editModalCancelBtn" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const currentPath = window.location.pathname.split('/').pop();
@@ -168,49 +296,82 @@
                 }
             });
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const initialStatus = urlParams.get('status');
-            if (initialStatus) {
-                switchTab(initialStatus);
-            } else {
-                switchTab('pending');
-            }
-        });
+            const tabs = {
+                pending: document.getElementById('pendingTab'),
+                approvedOngoing: document.getElementById('approvedOngoingTab'),
+                rejectedCompleted: document.getElementById('rejectedCompletedTab')
+            };
+            const tableRows = document.querySelectorAll('#requestTableBody tr');
 
-        const pendingTab = document.getElementById('pendingTab');
-        const approvedOngoingTab = document.getElementById('approvedOngoingTab');
-        const rejectedCompletedTab = document.getElementById('rejectedCompletedTab');
-        const requestTableBody = document.getElementById('requestTableBody');
+            const switchTab = (activeTabKey) => {
+                Object.values(tabs).forEach(tab => {
+                    tab.classList.remove('tab-active');
+                    tab.classList.add('text-gray-700', 'hover:bg-gray-200');
+                });
+                
+                const activeTab = tabs[activeTabKey];
+                activeTab.classList.add('tab-active');
+                activeTab.classList.remove('text-gray-700', 'hover:bg-gray-200');
 
-        function switchTab(status) {
-            document.querySelectorAll('.bg-gray-100 button').forEach(btn => {
-                btn.classList.remove('tab-active');
-                btn.classList.add('text-gray-700', 'hover:bg-gray-200');
+                tableRows.forEach(row => {
+                    const status = row.dataset.status;
+                    if (activeTabKey === 'pending' && status === 'pending') {
+                        row.style.display = 'table-row';
+                    } else if (activeTabKey === 'approvedOngoing' && status === 'approved-ongoing') {
+                        row.style.display = 'table-row';
+                    } else if (activeTabKey === 'rejectedCompleted' && status === 'rejected-completed') {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            };
+
+            tabs.pending.addEventListener('click', () => switchTab('pending'));
+            tabs.approvedOngoing.addEventListener('click', () => switchTab('approvedOngoing'));
+            tabs.rejectedCompleted.addEventListener('click', () => switchTab('rejectedCompleted'));
+
+            switchTab('pending');
+
+            const addBorrowingBtn = document.getElementById('addBorrowingBtn');
+            const addBorrowingModal = document.getElementById('addBorrowingModal');
+            const addModalCloseBtn = document.getElementById('addModalCloseBtn');
+            const addModalCancelBtn = document.getElementById('addModalCancelBtn');
+
+            const editBtns = document.querySelectorAll('.edit-btn');
+            const editBorrowingModal = document.getElementById('editBorrowingModal');
+            const editModalCloseBtn = document.getElementById('editModalCloseBtn');
+            const editModalCancelBtn = document.getElementById('editModalCancelBtn');
+            
+            const openModal = (modal) => {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.style.opacity = '1', 10);
+            };
+            
+            const closeModal = (modal) => {
+                modal.style.opacity = '0';
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            };
+
+            addBorrowingBtn.addEventListener('click', () => openModal(addBorrowingModal));
+            addModalCloseBtn.addEventListener('click', () => closeModal(addBorrowingModal));
+            addModalCancelBtn.addEventListener('click', () => closeModal(addBorrowingModal));
+            
+            editBtns.forEach(btn => {
+                btn.addEventListener('click', () => openModal(editBorrowingModal));
             });
+            editModalCloseBtn.addEventListener('click', () => closeModal(editBorrowingModal));
+            editModalCancelBtn.addEventListener('click', () => closeModal(editBorrowingModal));
 
-            let selectedTab;
-            switch (status) {
-                case 'pending': selectedTab = pendingTab; break;
-                case 'approved-ongoing': selectedTab = approvedOngoingTab; break;
-                case 'rejected-completed': selectedTab = rejectedCompletedTab; break;
-            }
-            if (selectedTab) {
-                selectedTab.classList.add('tab-active');
-                selectedTab.classList.remove('text-gray-700', 'hover:bg-gray-200');
-            }
-
-            document.querySelectorAll('#requestTableBody tr').forEach(row => {
-                if (row.dataset.status === status) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+            window.addEventListener('click', (event) => {
+                if (event.target === addBorrowingModal) {
+                    closeModal(addBorrowingModal);
+                }
+                if (event.target === editBorrowingModal) {
+                    closeModal(editBorrowingModal);
                 }
             });
-        }
-
-        pendingTab.addEventListener('click', () => switchTab('pending'));
-        approvedOngoingTab.addEventListener('click', () => switchTab('approved-ongoing'));
-        rejectedCompletedTab.addEventListener('click', () => switchTab('rejected-completed'));
+        });
     </script>
 </body>
 </html>
