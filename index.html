@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk / Daftar - Inventaris Peralatan Outdoor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        body {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            background-color: rgba(0, 0, 0, 0.75); 
+        }
+
+        .webapp-container {
+            max-width: 420px;
+            min-height: 500px; 
+            margin: 0 auto;  
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); 
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0.5rem; 
+            overflow: hidden; 
+        }
+        .hidden-form { display: none; }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+    <div class="webapp-container">
+        <div class="p-8 w-full">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">GearShare</h1>
+                <p class="text-gray-600">Sistem Inventaris Peralatan Outdoor</p>
+            </div>
+
+            <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
+                <button id="loginTab" class="flex-1 py-2 px-4 text-center text-sm font-medium rounded-md transition-colors duration-200 bg-teal-600 text-white">Masuk</button>
+                <button id="registerTab" class="flex-1 py-2 px-4 text-center text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 hover:bg-gray-200">Daftar</button>
+            </div>
+
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="login-email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="user@example.com" required>
+                </div>
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <input type="password" id="login-password" name="password" class="block w-full pr-10 pl-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="********" required>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                            <button type="button" id="toggleLoginPassword" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <a href="#" class="text-sm font-medium text-teal-600 hover:text-teal-500">Lupa Kata Sandi?</a>
+                </div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Masuk
+                </button>
+            </form>
+
+            <form id="registerForm" class="space-y-4 hidden-form">
+                <div>
+                    <label for="register-name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                    <input type="text" id="register-name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="John Doe" required>
+                </div>
+                <div>
+                    <label for="register-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="register-email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="user@example.com" required>
+                </div>
+                <div>
+                    <label for="register-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <input type="password" id="register-password" name="password" class="block w-full pr-10 pl-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="********" required>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                            <button type="button" id="toggleRegisterPassword" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="register-confirm-password" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
+                    <input type="password" id="register-confirm-password" name="confirm_password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="********" required>
+                </div>
+                <div class="flex items-center">
+                    <input id="terms-checkbox" name="terms" type="checkbox" class="h-4 w-4 text-teal-600 focus:ring-green-500 border-gray-300 rounded" required>
+                    <label for="terms-checkbox" class="ml-2 block text-sm text-gray-900">
+                        Saya setuju dengan <a href="#" class="font-medium text-teal-600 hover:text-teal-500">Syarat & Ketentuan</a>
+                    </label>
+                </div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Daftar
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-sm text-gray-600">
+                <p>Atau lanjutkan dengan</p>
+                <div class="mt-4 flex justify-center space-x-4">
+                    <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <img src="https://placehold.co/20x20/ffffff/000000?text=G" class="w-5 h-5 mr-2 rounded-full" alt="Google"> Google
+                    </button>
+                    <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <img src="https://placehold.co/20x20/ffffff/000000?text=A" class="w-5 h-5 mr-2 rounded-full" alt="Apple"> Apple
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+        const loginPasswordInput = document.getElementById('login-password');
+        const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
+        const registerPasswordInput = document.getElementById('register-password');
+
+        loginTab.classList.add('bg-teal-600', 'text-white');
+        registerTab.classList.remove('bg-teal-600', 'text-white');
+        registerTab.classList.add('text-gray-700', 'hover:bg-gray-200');
+        loginForm.classList.remove('hidden-form');
+        registerForm.classList.add('hidden-form');
+
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('bg-teal-600', 'text-white');
+            loginTab.classList.remove('text-gray-700', 'hover:bg-gray-200');
+            registerTab.classList.remove('bg-teal-600', 'text-white');
+            registerTab.classList.add('text-gray-700', 'hover:bg-gray-200');
+            loginForm.classList.remove('hidden-form');
+            registerForm.classList.add('hidden-form');
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('bg-teal-600', 'text-white');
+            registerTab.classList.remove('text-gray-700', 'hover:bg-gray-200');
+            loginTab.classList.remove('bg-teal-600', 'text-white');
+            loginTab.classList.add('text-gray-700', 'hover:bg-gray-200');
+            registerForm.classList.remove('hidden-form');
+            loginForm.classList.add('hidden-form');
+        });
+
+        toggleLoginPassword.addEventListener('click', () => {
+            const type = loginPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            loginPasswordInput.setAttribute('type', type);
+        });
+
+        toggleRegisterPassword.addEventListener('click', () => {
+            const type = registerPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            registerPasswordInput.setAttribute('type', type);
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (email === 'admin@gearex.com' && password === 'admin123') {
+                alert('Login Admin Berhasil!');
+                window.location.href = 'admin_dashboard.html'; 
+            } else if (email === 'member@gearex.com' && password === 'member123') {
+                alert('Login Anggota Berhasil!');
+                window.location.href = 'member_dashboard.html';
+            } else {
+                alert('Email atau password salah!'); 
+            }
+        });
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Register attempted! (Logika backend diperlukan)');
+            loginTab.click(); 
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan - Admin GearShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .sidebar-link.active {
+            @apply bg-green-700 text-white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+    <aside class="w-64 bg-gray-800 text-gray-200 flex flex-col p-4 shadow-xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">GearShare</h1>
+            <p class="text-sm text-gray-400">Admin Panel</p>
+        </div>
+        <nav class="flex-grow space-y-2">
+            <a href="admin_dashboard.html" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                <svg class="h-5 w-5 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+                Dashboard
+            </a>
+            <a href="admin_manage_equipment.html" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6m-3-3V8m-6 10H4a2 2 0 01-2-2V6a2 2 0 012-2h12a2 2 0 012 2v2m-6 10v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2a2 2 0 002 2h4a2 2 0 002-2z"></path></svg>
+                Kelola Peralatan
+            </a>
+            <a href="admin_manage_borrowings.html" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Kelola Peminjaman
+            </a>
+            <a href="admin_reports.html" class="sidebar-link active flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Lihat Laporan
+            </a>
+            <a href="admin_manage_members.html" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m0 0v-2a3 3 0 013-3h4a3 3 0 013 3v2M7 20H2v-2a3 3 0 015.356-1.857M7 13a6 6 0 0010 0V4A6 6 0 007 4v9z"></path></svg>
+                Kelola Anggota
+            </a>
+        </div>
+        <div class="mt-auto pt-4 border-t border-gray-700">
+            <a href="index.html" class="flex items-center p-3 rounded-lg text-red-400 hover:bg-gray-700 transition-colors duration-200">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                Keluar
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-grow flex flex-col">
+        <header class="bg-white shadow-md p-4 flex items-center justify-between md:hidden">
+            <h1 class="text-xl font-bold text-gray-800">Laporan</h1>
+            <div class="flex items-center space-x-3">
+                <img src="https://placehold.co/40x40/cccccc/ffffff?text=A" alt="Admin Avatar" class="w-10 h-10 rounded-full border-2 border-gray-300">
+            </div>
+        </header>
+
+        <main class="flex-grow p-6 overflow-y-auto">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Laporan Sistem</h2>
+
+            <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 flex flex-col lg:flex-row gap-6">
+                <div class="w-full lg:w-1/3 p-4 bg-gray-50 rounded-lg border border-gray-100 flex-none">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Pilih Laporan</h3>
+                    <nav class="space-y-2">
+                        <button id="report-availability" class="report-option active w-full text-left p-3 rounded-md text-gray-700 bg-green-100 hover:bg-green-200 font-medium transition-colors duration-200">
+                            Laporan Ketersediaan Peralatan
+                        </button>
+                        <button id="report-frequency" class="report-option w-full text-left p-3 rounded-md text-gray-700 hover:bg-gray-200 transition-colors duration-200">
+                            Laporan Frekuensi Peminjaman
+                        </button>
+                        <button id="report-condition" class="report-option w-full text-left p-3 rounded-md text-gray-700 hover:bg-gray-200 transition-colors duration-200">
+                            Laporan Ikhtisar Kondisi
+                        </button>
+                    </nav>
+                </div>
+
+                <div class="flex-grow bg-white p-4 rounded-lg border border-gray-200">
+                    <h3 id="reportTitle" class="text-2xl font-bold text-gray-900 mb-4">Laporan Ketersediaan Peralatan</h3>
+                    <p id="reportDescription" class="text-gray-600 mb-6">Menunjukkan persentase peralatan yang tersedia vs. yang sedang dipinjam.</p>
+                    
+                    <div id="reportContent" class="w-full h-64 md:h-96 bg-gray-200 flex items-center justify-center text-gray-600 rounded-md">
+                        <img src="https://placehold.co/800x600/d1d1d1/333333?text=Grafik+Laporan+Ketersediaan" alt="Report Chart" class="max-w-full max-h-full object-contain">
+                    </div>
+
+                    <div class="mt-6 flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-4">
+                        <label for="date-from" class="text-sm font-medium text-gray-700">Dari Tanggal:</label>
+                        <input type="date" id="date-from" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                        <label for="date-to" class="text-sm font-medium text-gray-700">Sampai Tanggal:</label>
+                        <input type="date" id="date-to" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                        <button class="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700">Terapkan Filter</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                if (link.getAttribute('href').split('/').pop() === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialReportType = urlParams.get('type');
+            if (initialReportType) {
+                displayReport(initialReportType);
+            } else {
+                displayReport('availability'); 
+            }
+        });
+
+        const reportOptions = {
+            'availability': {
+                title: 'Laporan Ketersediaan Peralatan',
+                description: 'Menunjukkan persentase peralatan yang tersedia vs. yang sedang dipinjam.',
+                placeholder: 'https://placehold.co/800x600/d1d1d1/333333?text=Grafik+Laporan+Ketersediaan'
+            },
+            'frequency': {
+                title: 'Laporan Frekuensi Peminjaman',
+                description: 'Menampilkan item yang paling sering dipinjam dan frekuensinya.',
+                placeholder: 'https://placehold.co/800x600/d1d1d1/333333?text=Grafik+Frekuensi+Peminjaman'
+            },
+            'condition': {
+                title: 'Laporan Ikhtisar Kondisi',
+                description: 'Merangkum distribusi kondisi peralatan di seluruh inventaris.',
+                placeholder: 'https://placehold.co/800x600/d1d1d1/333333?text=Grafik+Ikhtisar+Kondisi'
+            }
+        };
+
+        const reportButtons = document.querySelectorAll('.report-option');
+        const reportTitle = document.getElementById('reportTitle');
+        const reportDescription = document.getElementById('reportDescription');
+        const reportContent = document.getElementById('reportContent');
+
+        function displayReport(type) {
+            reportButtons.forEach(btn => {
+                btn.classList.remove('bg-green-100');
+                btn.classList.remove('text-green-700');
+                btn.classList.add('text-gray-700', 'hover:bg-gray-200');
+            });
+
+            const selectedButton = document.getElementById(`report-${type}`);
+            if (selectedButton) {
+                selectedButton.classList.add('bg-green-100', 'text-green-700');
+                selectedButton.classList.remove('text-gray-700', 'hover:bg-gray-200');
+            }
+            
+            const reportInfo = reportOptions[type];
+            if (reportInfo) {
+                reportTitle.textContent = reportInfo.title;
+                reportDescription.textContent = reportInfo.description;
+                reportContent.innerHTML = `<img src="${reportInfo.placeholder}" alt="${reportInfo.title}" class="max-w-full max-h-full object-contain">`;
+            }
+        }
+    </script>
+</body>
+</html>

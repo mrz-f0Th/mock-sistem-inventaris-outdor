@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Lapor Kondisi - GearShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fbf8; 
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+
+        .webapp-container {
+            max-width: 420px; 
+            height: 100vh;    
+            margin: 0 auto;   
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+            background-color: #ffffff; 
+            position: relative; 
+            display: flex;
+            flex-direction: column; 
+            overflow: hidden; 
+        }
+
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            background-color: #e0f2f7; 
+            overflow: hidden; 
+        }
+
+        .webapp-header {
+            flex-shrink: 0; 
+        }
+        .webapp-main-content {
+            flex-grow: 1; 
+            overflow-y: auto; 
+            padding-bottom: 80px !important; 
+        }
+        .webapp-footer {
+            flex-shrink: 0; 
+            position: absolute; 
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 10;
+            background-color: white; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col md:block">
+    <div class="webapp-container">
+        <header class="webapp-header bg-teal-700 text-white p-4 flex items-center justify-between shadow-md">
+            <a href="my_borrowings.html" class="p-2 rounded-full hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </a>
+            <h1 class="text-xl font-bold" id="formTitle">Lapor Kondisi Peralatan</h1>
+            <div class="flex items-center space-x-3">
+                <img src="https://placehold.co/40x40/cccccc/ffffff?text=U" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-white">
+            </div>
+        </header>
+
+        <main class="webapp-main-content p-4">
+            <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Laporan Kondisi untuk <span id="equipmentNameDisplay">Tenda Dome 4P</span></h2>
+                
+                <form id="reportConditionForm" class="space-y-6">
+                    <div>
+                        <label for="equipment-name-readonly" class="block text-sm font-medium text-gray-700">Nama Peralatan</label>
+                        <input type="text" id="equipment-name-readonly" value="Tenda Dome 4P" readonly class="mt-1 block w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded-md shadow-sm sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="borrowing-period-readonly" class="block text-sm font-medium text-gray-700">Periode Peminjaman</label>
+                        <input type="text" id="borrowing-period-readonly" value="10 Juli - 15 Juli 2025" readonly class="mt-1 block w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded-md shadow-sm sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="condition-return" class="block text-sm font-medium text-gray-700">Kondisi Saat Dikembalikan <span class="text-red-500">*</span></label>
+                        <select id="condition-return" name="condition_return" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" required>
+                            <option value="">Pilih Kondisi</option>
+                            <option value="sangat_baik">Sangat Baik</option>
+                            <option value="baik">Baik</option>
+                            <option value="cukup_baik">Cukup Baik</option>
+                            <option value="rusak_ringan">Rusak Ringan</option>
+                            <option value="rusak_berat">Rusak Berat</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="notes-comments" class="block text-sm font-medium text-gray-700">Catatan / Komentar</label>
+                        <textarea id="notes-comments" name="notes_comments" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Jelaskan detail masalah jika ada, atau tambahkan catatan positif..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Unggah Foto Kondisi (Opsional)</label>
+                        <div id="image-upload-area" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-green-500">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"></path>
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-teal-600 hover:text-teal-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                        <span>Unggah file</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only" multiple accept="image/*">
+                                    </label>
+                                    <p class="pl-1">atau seret dan lepas</p>
+                                </div>
+                                <p class="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
+                            </div>
+                        </div>
+                        <div id="image-previews" class="mt-4 grid grid-cols-3 gap-2">
+                            </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer class="webapp-footer bg-white border-t border-gray-200 shadow-lg p-4 z-10 w-full">
+            <div class="flex justify-end space-x-3">
+                <button type="button" id="cancelButton" class="px-6 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Batal
+                </button>
+                <button type="submit" form="reportConditionForm" class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Kirim Laporan
+                </button>
+            </div>
+        </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const equipmentName = urlParams.get('equipment') || 'Peralatan Tidak Dikenal';
+            const borrowingPeriod = urlParams.get('period') || 'Tidak Diketahui';
+
+            document.getElementById('equipmentNameDisplay').textContent = equipmentName;
+            document.getElementById('equipment-name-readonly').value = equipmentName;
+            document.getElementById('borrowing-period-readonly').value = borrowingPeriod;
+
+            document.getElementById('cancelButton').addEventListener('click', () => {
+                window.history.back(); 
+            });
+        });
+
+        const fileUpload = document.getElementById('file-upload');
+        const imagePreviews = document.getElementById('image-previews');
+        let uploadedFiles = []; 
+
+        fileUpload.addEventListener('change', (event) => {
+            Array.from(event.target.files).forEach(file => {
+                if (file.type.startsWith('image/') && !uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    uploadedFiles.push(file); 
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'relative group';
+                        imgContainer.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview" class="w-full h-24 object-cover rounded-md">
+                            <button type="button" class="remove-image-button absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        `;
+                        imagePreviews.appendChild(imgContainer);
+
+                        imgContainer.querySelector('.remove-image-button').addEventListener('click', (e) => {
+                            const fileNameToRemove = file.name;
+                            uploadedFiles = uploadedFiles.filter(f => f.name !== fileNameToRemove);
+                            e.target.closest('.group').remove();
+                            if (uploadedFiles.length === 0) fileUpload.value = ''; 
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            fileUpload.value = ''; 
+        });
+
+        document.getElementById('reportConditionForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Laporan kondisi dikirim! (Data akan dikirim ke backend)');
+        });
+    </script>
+</body>
+</html>

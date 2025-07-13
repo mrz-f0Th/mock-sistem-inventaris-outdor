@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Peralatan - GearShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fbf8; /* Background for the *entire* browser window */
+        }
+        /* Hide scrollbar for horizontal lists */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* --- Custom styles for Webapp View --- */
+        .webapp-container {
+            max-width: 420px; /* Lebar maksimum seperti layar smartphone */
+            height: 100vh;    /* PENTING: Memaksa tinggi kontainer persis setinggi viewport */
+            margin: 0 auto;   /* Tengah secara horizontal */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Tambah bayangan */
+            background-color: #ffffff; /* Latar belakang kontainer */
+            position: relative; /* PENTING: Agar footer absolute berfungsi di dalamnya */
+            display: flex;
+            flex-direction: column; /* Mengatur item flex secara vertikal */
+            overflow: hidden; /* Memastikan tidak ada scrollbar di kontainer utama */
+        }
+
+        /* Adjust body to ensure the container is centered and the outer background is visible */
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            justify-content: center; /* Tengah kontainer webapp horizontal */
+            align-items: center; /* Tengah kontainer webapp vertikal jika tingginya kurang dari 100vh */
+            background-color: #e0f2f7; /* Latar belakang di luar kontainer webapp */
+            overflow: hidden; /* Mencegah scrollbar pada body */
+        }
+
+        /* Header and Footer are fixed height, main takes remaining space and scrolls */
+        .webapp-header {
+            flex-shrink: 0; /* Mencegah header mengecil */
+        }
+        .webapp-main-content {
+            flex-grow: 1; /* Membuat main memenuhi sisa ruang */
+            overflow-y: auto; /* PENTING: Hanya main yang diizinkan untuk discroll */
+            padding-bottom: 100px !important; /* Ruang untuk footer */
+        }
+        .webapp-footer {
+            flex-shrink: 0; /* Mencegah footer mengecil */
+            position: absolute; /* PENTING: Agar menempel di bawah container */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 10;
+            background-color: white; /* Pastikan background footer solid */
+        }
+
+        /* Specific styles for this page */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .calendar-day {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            height: 40px; /* Fixed height for consistent look */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col md:block">
+    <div class="webapp-container">
+        <header class="webapp-header bg-teal-700 text-white p-4 flex items-center justify-between shadow-md">
+            <a href="browse_equipment.html" class="p-2 rounded-full hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </a>
+            <h1 class="text-xl font-bold">Detail Peralatan</h1>
+            <div class="flex items-center space-x-3">
+                <button class="p-2 rounded-full hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6A3 3 0 119 12a3 3 0 01-3 3m0 0l6.632-3.316m-6.632 0a3 3 0 100-2.684m0 2.684V2.5l2-2h4l2 2v6.5m-8 0v8"></path></svg>
+                </button>
+                <button class="p-2 rounded-full hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="webapp-main-content p-4">
+            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                <div class="w-full h-64 relative overflow-hidden bg-gray-200">
+                    <img src="https://placehold.co/1200x800/d1d1d1/333333?text=Gambar+Peralatan+Utama" alt="Main Equipment Image" class="w-full h-full object-cover">
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+                        <img src="https://placehold.co/80x60/e0e0e0/555555?text=Thumb1" alt="Thumbnail 1" class="w-20 h-16 object-cover rounded-md border-2 border-green-500 cursor-pointer">
+                        <img src="https://placehold.co/80x60/e0e0e0/555555?text=Thumb2" alt="Thumbnail 2" class="w-20 h-16 object-cover rounded-md border-2 border-transparent hover:border-green-500 cursor-pointer">
+                        <img src="https://placehold.co/80x60/e0e0e0/555555?text=Thumb3" alt="Thumbnail 3" class="w-20 h-16 object-cover rounded-md border-2 border-transparent hover:border-green-500 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Tenda Dome 4P</h2>
+                    <p class="text-lg text-gray-700 mb-4">Jenis: Tenda | Merek: Eiger | Kondisi: <span class="font-semibold text-teal-600">Sangat Baik</span></p>
+
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Pemilik:</p>
+                            <a href="#" class="text-md font-semibold text-blue-600 hover:text-blue-800">John Doe</a>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Lokasi:</p>
+                            <p class="text-md font-semibold text-gray-800">Gudang A, Rak 3</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Deskripsi</h3>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        Tenda dome kapasitas 4 orang, cocok untuk camping keluarga atau hiking ringan. Dilengkapi dengan double layer dan pasak aluminium. Sangat ringan dan mudah dipasang. Ideal untuk berbagai kondisi cuaca.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Spesifikasi</h3>
+                    <ul class="list-disc list-inside text-gray-700 mb-6 space-y-1">
+                        <li>Berat: 3.5 kg</li>
+                        <li>Kapasitas: 4 Orang</li>
+                        <li>Bahan: Polyester Ripstop</li>
+                        <li>Dimensi: 210 x 210 x 130 cm</li>
+                    </ul>
+
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Kalender Ketersediaan</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="flex justify-between items-center mb-4">
+                            <button class="p-2 rounded-full hover:bg-gray-200"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                            <span class="text-lg font-semibold text-gray-800">Juli 2025</span>
+                            <button class="p-2 rounded-full hover:bg-gray-200"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+                        </div>
+                        <div class="calendar-grid text-center font-medium text-gray-600 mb-2">
+                            <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                        </div>
+                        <div class="calendar-grid text-center text-gray-800">
+                            <span class="calendar-day text-gray-400">29</span><span class="calendar-day text-gray-400">30</span><span class="calendar-day text-gray-400">1</span>
+                            <span class="calendar-day">2</span><span class="calendar-day">3</span><span class="calendar-day">4</span><span class="calendar-day">5</span>
+                            <span class="calendar-day bg-red-200 text-red-800">6</span><span class="calendar-day bg-red-200 text-red-800">7</span><span class="calendar-day">8</span>
+                            <span class="calendar-day">9</span><span class="calendar-day bg-teal-100 text-teal-800 border-2 border-green-500 cursor-pointer">10</span><span class="calendar-day bg-teal-100 text-teal-800 border-2 border-green-500 cursor-pointer">11</span>
+                            <span class="calendar-day bg-red-200 text-red-800">12</span><span class="calendar-day bg-red-200 text-red-800">13</span><span class="calendar-day bg-red-200 text-red-800">14</span>
+                            <span class="calendar-day">15</span><span class="calendar-day">16</span><span class="calendar-day">17</span><span class="calendar-day">18</span>
+                            <span class="calendar-day">19</span><span class="calendar-day">20</span><span class="calendar-day">21</span><span class="calendar-day">22</span>
+                            <span class="calendar-day">23</span><span class="calendar-day">24</span><span class="calendar-day">25</span><span class="calendar-day">26</span>
+                            <span class="calendar-day">27</span><span class="calendar-day">28</span><span class="calendar-day">29</span><span class="calendar-day">30</span>
+                            <span class="calendar-day">31</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-4">Pilih tanggal mulai dan berakhir untuk melihat ketersediaan.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="webapp-footer bg-white border-t border-gray-200 shadow-lg p-4 z-10 w-full">
+            <button class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                Ajukan Peminjaman
+            </button>
+            </footer>
+
+    <script>
+        const mainImage = document.querySelector('.w-full.h-full.object-cover');
+        document.querySelectorAll('.absolute.bottom-4 img').forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                mainImage.src = thumbnail.src.replace(/(\d+x\d+)/, '1200x800'); 
+                document.querySelectorAll('.absolute.bottom-4 img').forEach(t => t.classList.remove('border-green-500'));
+                thumbnail.classList.add('border-green-500');
+            });
+        });
+
+        document.querySelectorAll('.calendar-day').forEach(day => {
+            day.addEventListener('click', () => {
+                if (!day.classList.contains('text-gray-400') && !day.classList.contains('bg-red-200')) {
+                    document.querySelectorAll('.calendar-day').forEach(d => {
+                        if (d.classList.contains('border-green-500')) {
+                            d.classList.remove('border-green-500', 'bg-teal-100');
+                            d.classList.add('text-gray-800');
+                        }
+                    });
+                    day.classList.add('border-green-500', 'bg-teal-100', 'text-teal-800');
+                    alert('Tanggal ' + day.textContent + ' dipilih! (Logika pemilihan rentang tanggal diperlukan)');
+                } else if (day.classList.contains('bg-red-200')) {
+                    alert('Tanggal ' + day.textContent + ' tidak tersedia.');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
